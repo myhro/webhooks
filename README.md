@@ -1,4 +1,4 @@
-WebHooks + WebSockets
+Webhooks + WebSockets
 =====================
 
 An application inspired by the [Webhook.site][webhook-site], based on [Redis Pub/Sub][redis-pubsub] architecture.

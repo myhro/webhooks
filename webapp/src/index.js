@@ -56,7 +56,7 @@ class App extends React.Component {
   render() {
     return (
       <div className="container">
-        <h1>WebHooks + WebSockets</h1>
+        <h1>Webhooks + WebSockets</h1>
         <h6>
           Send HTTP requests to <a href={this.state.url}>{this.state.url}</a>
         </h6>
