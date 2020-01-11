@@ -10,6 +10,8 @@ import Table from './table';
 
 import '../node_modules/materialize-css/dist/css/materialize.min.css';
 
+import './css/style.css';
+
 class App extends React.Component {
   constructor(props) {
     super(props);

@@ -20,7 +20,9 @@ class Table extends React.Component {
           <td>{item.ip}</td>
           <td>{item.proto}</td>
           <td>{item.method}</td>
-          <td>{this.renderHeaders(item.headers)}</td>
+          <td>
+            <div className="headers">{this.renderHeaders(item.headers)}</div>
+          </td>
           <td>{item.body}</td>
         </tr>
       );
