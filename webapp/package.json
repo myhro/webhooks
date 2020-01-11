@@ -16,8 +16,8 @@
   },
   "scripts": {
     "eslint": "eslint src/",
+    "parcel": "parcel",
     "prettier": "prettier",
-    "serve": "serve dist/",
-    "watch": "parcel watch src/index.html"
+    "serve": "serve dist/"
   }
 }

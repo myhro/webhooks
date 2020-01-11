@@ -1,3 +1,5 @@
+/* global process */
+
 import cookie from 'cookie';
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -12,16 +14,17 @@ class App extends React.Component {
   constructor(props) {
     super(props);
 
-    let api = '127.0.0.1:8080';
+    let api = process.env.API_URL;
     let channel = this.loadChannel();
     let proto = location.protocol;
+    let ws_proto = proto == 'http:' ? 'ws' : 'wss';
 
     this.state = {
       url: `${proto}//${api}/${channel}`,
       webhooks: [],
     };
 
-    this.ws = new w3cwebsocket(`ws://${api}/${channel}/listen`);
+    this.ws = new w3cwebsocket(`${ws_proto}://${api}/${channel}/listen`);
     this.ws.onmessage = this.handleMessage.bind(this);
     this.ws.onopen = () => {
       console.log('WebSocket connected');
