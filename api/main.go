@@ -58,11 +58,19 @@ func webhook(c *gin.Context) {
 		return
 	}
 
+	var ip string
+	forwarded, ok := c.Request.Header["X-Forwarded-For"]
+	if ok {
+		ip = forwarded[0]
+	} else {
+		ip = strings.Split(c.Request.RemoteAddr, ":")[0]
+	}
+
 	msg := message{
 		Body:    string(body),
 		Date:    time.Now().Format("2006-01-02 15:04:05-0700"),
 		Headers: c.Request.Header,
-		IP:      strings.Split(c.Request.RemoteAddr, ":")[0],
+		IP:      ip,
 		Method:  c.Request.Method,
 		Proto:   c.Request.Proto,
 	}
