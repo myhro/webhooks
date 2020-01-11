@@ -19,11 +19,13 @@ class App extends React.Component {
     this.state = {
       url: `${proto}//${api}/${channel}`,
       webhooks: [],
-    }
+    };
 
     this.ws = new w3cwebsocket(`ws://${api}/${channel}/listen`);
     this.ws.onmessage = this.handleMessage.bind(this);
-    this.ws.onopen = () => { console.log('WebSocket connected'); };
+    this.ws.onopen = () => {
+      console.log('WebSocket connected');
+    };
   }
 
   handleMessage(msg) {
@@ -50,7 +52,9 @@ class App extends React.Component {
     return (
       <div className="container">
         <h1>WebHooks + WebSockets</h1>
-        <h6>Send HTTP requests to <a href={this.state.url}>{this.state.url}</a></h6>
+        <h6>
+          Send HTTP requests to <a href={this.state.url}>{this.state.url}</a>
+        </h6>
         <Table webhooks={this.state.webhooks} />
       </div>
     );

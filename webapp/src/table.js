@@ -2,26 +2,29 @@ import React from 'react';
 
 class Table extends React.Component {
   renderHeaders(header) {
-    return (Object.keys(header).map((item, i) => {
+    return Object.keys(header).map((item, i) => {
       return (
         <span key={i}>
-          <strong>{item}</strong>: {header[item]}<br/>
+          <strong>{item}</strong>: {header[item]}
+          <br />
         </span>
       );
-    }));
+    });
   }
 
   renderRows() {
-    return (this.props.webhooks.map((item, i) => {
-      return (<tr key={i}>
-        <td>{item.date}</td>
-        <td>{item.ip}</td>
-        <td>{item.proto}</td>
-        <td>{item.method}</td>
-        <td>{this.renderHeaders(item.headers)}</td>
-        <td>{item.body}</td>
-      </tr>);
-    }));
+    return this.props.webhooks.map((item, i) => {
+      return (
+        <tr key={i}>
+          <td>{item.date}</td>
+          <td>{item.ip}</td>
+          <td>{item.proto}</td>
+          <td>{item.method}</td>
+          <td>{this.renderHeaders(item.headers)}</td>
+          <td>{item.body}</td>
+        </tr>
+      );
+    });
   }
 
   render() {
@@ -38,9 +41,7 @@ class Table extends React.Component {
               <th>Body</th>
             </tr>
           </thead>
-          <tbody>
-            {this.renderRows()}
-          </tbody>
+          <tbody>{this.renderRows()}</tbody>
         </table>
       );
     }
