@@ -5,7 +5,6 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
-	"strings"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -29,7 +28,7 @@ func checkOrigin(r *http.Request) bool {
 	return true
 }
 
-func checkPeer(ws *websocket.Conn, sub *redis.PubSub) {
+func checkPeer(ws *websocket.Conn, ip string, sub *redis.PubSub) {
 	timeout := 30 * time.Second
 	for {
 		time.Sleep(timeout)
@@ -39,7 +38,7 @@ func checkPeer(ws *websocket.Conn, sub *redis.PubSub) {
 		}
 	}
 
-	log.Print("Closing connection for peer: ", ws.RemoteAddr())
+	log.Print("Closing connection for peer: ", ip)
 	sub.Close()
 	ws.Close()
 }
@@ -53,12 +52,13 @@ func listen(c *gin.Context) {
 	}
 
 	channel := c.Param("chan")
-	go subscribe(ws, channel)
+	ip := c.ClientIP()
+	go subscribe(ws, ip, channel)
 }
 
-func subscribe(ws *websocket.Conn, channel string) {
+func subscribe(ws *websocket.Conn, ip string, channel string) {
 	sub := client.Subscribe(channel)
-	go checkPeer(ws, sub)
+	go checkPeer(ws, ip, sub)
 
 	ch := sub.Channel()
 	for msg := range ch {
@@ -77,19 +77,11 @@ func webhook(c *gin.Context) {
 		return
 	}
 
-	var ip string
-	forwarded, ok := c.Request.Header["X-Forwarded-For"]
-	if ok {
-		ip = forwarded[0]
-	} else {
-		ip = strings.Split(c.Request.RemoteAddr, ":")[0]
-	}
-
 	msg := message{
 		Body:    string(body),
 		Date:    time.Now().Format("2006-01-02 15:04:05-0700"),
 		Headers: c.Request.Header,
-		IP:      ip,
+		IP:      c.ClientIP(),
 		Method:  c.Request.Method,
 		Proto:   c.Request.Proto,
 	}
