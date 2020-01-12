@@ -31,6 +31,9 @@ class App extends React.Component {
     this.ws.onopen = () => {
       console.log('WebSocket connected');
     };
+    this.ws.onclose = () => {
+      console.log('WebSocket disconnected');
+    };
   }
 
   handleMessage(msg) {

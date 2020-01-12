@@ -29,21 +29,40 @@ func checkOrigin(r *http.Request) bool {
 	return true
 }
 
+func checkPeer(ws *websocket.Conn, sub *redis.PubSub) {
+	timeout := 30 * time.Second
+	for {
+		time.Sleep(timeout)
+		err := ws.WriteControl(websocket.PingMessage, []byte{}, time.Now().Add(timeout))
+		if err != nil {
+			break
+		}
+	}
+
+	log.Print("Closing connection for peer: ", ws.RemoteAddr())
+	sub.Close()
+	ws.Close()
+}
+
 func listen(c *gin.Context) {
 	ws, err := upgrader.Upgrade(c.Writer, c.Request, nil)
 	if err != nil {
 		log.Print("Error during upgrade: ", err)
+		c.String(http.StatusInternalServerError, "Internal Server Error")
 		return
 	}
-	defer ws.Close()
 
 	channel := c.Param("chan")
+	go subscribe(ws, channel)
+}
+
+func subscribe(ws *websocket.Conn, channel string) {
 	sub := client.Subscribe(channel)
-	defer sub.Unsubscribe()
+	go checkPeer(ws, sub)
 
 	ch := sub.Channel()
 	for msg := range ch {
-		err = ws.WriteMessage(websocket.TextMessage, []byte(msg.Payload))
+		err := ws.WriteMessage(websocket.TextMessage, []byte(msg.Payload))
 		if err != nil {
 			log.Print("Error writing message: ", err)
 			break
