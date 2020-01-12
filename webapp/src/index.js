@@ -41,15 +41,13 @@ class App extends React.Component {
 
   loadChannel() {
     let channel;
-
-    if (document.cookie == '') {
-      channel = sha1(Math.random()).substring(0, 7);
-      document.cookie = `channel=${channel}`;
-    } else {
+    if (document.cookie.includes('channel=')) {
       let cookies = cookie.parse(document.cookie);
       channel = cookies.channel;
+    } else {
+      channel = sha1(Math.random()).substring(0, 7);
+      document.cookie = cookie.serialize('channel', channel);
     }
-
     return channel;
   }
 
