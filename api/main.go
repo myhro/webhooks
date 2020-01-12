@@ -29,7 +29,12 @@ func checkOrigin(r *http.Request) bool {
 }
 
 func checkPeer(ws *websocket.Conn, ip string, sub *redis.PubSub) {
-	timeout := 30 * time.Second
+	interval := 3
+	if gin.Mode() == "release" {
+		interval = 30
+	}
+	timeout := time.Duration(interval) * time.Second
+
 	for {
 		time.Sleep(timeout)
 		err := ws.WriteControl(websocket.PingMessage, []byte{}, time.Now().Add(timeout))
