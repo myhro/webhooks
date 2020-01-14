@@ -1,19 +1,27 @@
 import React from 'react';
 
-class Table extends React.Component {
-  renderHeaders(header) {
-    return Object.keys(header).map((item, i) => {
+import { Header, Webhook } from './webhook';
+
+type TableProps = {
+  webhooks: Webhook[];
+};
+
+type TableState = {};
+
+class Table extends React.Component<TableProps, TableState> {
+  private renderHeaders(header: Header): JSX.Element[] {
+    return Object.keys(header).map((key: string, i: number) => {
       return (
         <span key={i}>
-          <strong>{item}</strong>: {header[item]}
+          <strong>{key}</strong>: {header[key]}
           <br />
         </span>
       );
     });
   }
 
-  renderRows() {
-    return this.props.webhooks.map((item, i) => {
+  private renderRows(): JSX.Element[] {
+    return this.props.webhooks.map((item: Webhook, i: number) => {
       return (
         <tr key={i}>
           <td>{item.date}</td>
@@ -29,7 +37,7 @@ class Table extends React.Component {
     });
   }
 
-  render() {
+  render(): JSX.Element {
     if (this.props.webhooks.length > 0) {
       return (
         <table>
