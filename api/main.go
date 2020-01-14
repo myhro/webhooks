@@ -28,26 +28,6 @@ func checkOrigin(r *http.Request) bool {
 	return true
 }
 
-func checkPeer(ws *websocket.Conn, ip string, sub *redis.PubSub) {
-	interval := 3
-	if gin.Mode() == "release" {
-		interval = 30
-	}
-	timeout := time.Duration(interval) * time.Second
-
-	for {
-		time.Sleep(timeout)
-		err := ws.WriteControl(websocket.PingMessage, []byte{}, time.Now().Add(timeout))
-		if err != nil {
-			break
-		}
-	}
-
-	log.Print("Closing connection for peer: ", ip)
-	sub.Close()
-	ws.Close()
-}
-
 func listen(c *gin.Context) {
 	ws, err := upgrader.Upgrade(c.Writer, c.Request, nil)
 	if err != nil {
@@ -62,15 +42,33 @@ func listen(c *gin.Context) {
 }
 
 func subscribe(ws *websocket.Conn, ip string, channel string) {
+	interval := 3
+	if gin.Mode() == "release" {
+		interval = 30
+	}
+	timeout := time.Duration(interval) * time.Second
+
 	sub := client.Subscribe(channel)
-	go checkPeer(ws, ip, sub)
+	defer func() {
+		log.Print("Closing connection for peer: ", ip)
+		sub.Close()
+		ws.Close()
+	}()
 
 	ch := sub.Channel()
-	for msg := range ch {
-		err := ws.WriteMessage(websocket.TextMessage, []byte(msg.Payload))
-		if err != nil {
-			log.Print("Error writing message: ", err)
-			break
+	for {
+		select {
+		case msg := <-ch:
+			err := ws.WriteMessage(websocket.TextMessage, []byte(msg.Payload))
+			if err != nil {
+				log.Print("Error writing message: ", err)
+				return
+			}
+		case <-time.After(timeout):
+			err := ws.WriteControl(websocket.PingMessage, []byte{}, time.Now().Add(timeout))
+			if err != nil {
+				return
+			}
 		}
 	}
 }
