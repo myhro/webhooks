@@ -1,11 +1,11 @@
-export type Header = {
+export type Headers = {
   [key: string]: string[];
 };
 
 export type Webhook = {
   body: string;
   date: string;
-  headers: Header;
+  headers: Headers;
   ip: string;
   method: string;
   proto: string;
