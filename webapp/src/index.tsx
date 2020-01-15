@@ -50,7 +50,7 @@ class App extends React.Component<AppProps, AppState> {
   }
 
   private loadChannel(): string {
-    let channel;
+    let channel = '';
     if (document.cookie.includes('channel=')) {
       const cookies = cookie.parse(document.cookie);
       channel = cookies.channel;

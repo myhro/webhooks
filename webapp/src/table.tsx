@@ -57,8 +57,8 @@ function Table(props: TableProps): JSX.Element {
           </tr>
         </thead>
         <tbody>
-          {props.webhooks.map((item: Webhook, i: number) => (
-            <Row key={i} webhook={item} />
+          {props.webhooks.map((w: Webhook, i: number) => (
+            <Row key={i} webhook={w} />
           ))}
         </tbody>
       </table>
