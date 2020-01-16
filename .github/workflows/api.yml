@@ -1,0 +1,14 @@
+name: API
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/setup-go@v1
+        with:
+          go-version: 1.13
+      - uses: actions/checkout@v1
+      - name: Build
+        run: |
+          cd api/
+          make build

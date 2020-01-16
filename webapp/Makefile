@@ -1,4 +1,7 @@
-build: clean env-prod
+build: clean env
+	npm run parcel -- build src/index.html
+
+build-prod: clean env-prod
 	npm run parcel -- build src/index.html
 
 check:
@@ -6,6 +9,10 @@ check:
 
 clean:
 	rm -rf .cache/ dist/ .env
+
+deps:
+	npm ci
+
 env:
 	echo "API_URL=127.0.0.1:8080" > .env
 
