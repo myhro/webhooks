@@ -1,5 +1,4 @@
-build: clean
-	echo "API_URL=webhooks.myhro.info" > .env
+build: clean env-prod
 	npm run parcel -- build src/index.html
 
 check:
@@ -7,6 +6,11 @@ check:
 
 clean:
 	rm -rf .cache/ dist/ .env
+env:
+	echo "API_URL=127.0.0.1:8080" > .env
+
+env-prod:
+	echo "API_URL=webhooks.myhro.info" > .env
 
 lint:
 	npm run eslint
@@ -20,6 +24,5 @@ serve:
 types:
 	npm run types
 
-watch: clean
-	echo "API_URL=127.0.0.1:8080" > .env
-	npm run parcel -- watch src/index.html
+watch: clean env
+	npm run parcel -- src/index.html
