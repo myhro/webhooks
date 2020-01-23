@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -101,7 +102,15 @@ func webhook(c *gin.Context) {
 }
 
 func init() {
-	client = redis.NewClient(&redis.Options{})
+	addr := os.Getenv("REDIS_ADDR")
+	if addr == "" {
+		addr = "localhost:6379"
+	}
+
+	client = redis.NewClient(&redis.Options{
+		Addr: addr,
+	})
+
 	_, err := client.Ping().Result()
 	if err != nil {
 		log.Fatal("Error while connecting to Redis: ", err)
