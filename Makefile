@@ -22,6 +22,9 @@ docker-prod:
 	docker build -t $(IMAGE) .
 	docker tag $(IMAGE):latest $(IMAGE):$(VERSION)
 
+deps-ci:
+	sudo apt update
+	sudo apt install -y upx-ucl
 
 push:
 	docker push $(IMAGE):$(VERSION)

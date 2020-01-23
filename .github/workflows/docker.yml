@@ -1,0 +1,53 @@
+name: Docker
+on: [push]
+jobs:
+  check:
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
+      - name: Check
+        run: |
+          cd webapp/
+          make deps
+          make check
+          make lint
+          make types
+  build:
+    needs: check
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-go@v1
+        with:
+          go-version: 1.13
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
+      - name: Build
+        run: |
+          make deps-ci
+          make build
+  push:
+    if: github.ref == 'refs/heads/master'
+    needs: build
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-go@v1
+        with:
+          go-version: 1.13
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
+      - uses: azure/docker-login@v1
+        with:
+          username: ${{ secrets.DOCKER_LOGIN }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+      - name: Push
+        run: |
+          make deps-ci
+          make build-prod
+          make push
