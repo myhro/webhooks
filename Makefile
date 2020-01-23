@@ -15,6 +15,12 @@ clean:
 	make -C api/ clean
 	make -C webapp/ clean
 
+deploy:
+	sed -i 's/IMAGE_VERSION/$(VERSION)/' k8s/*/deployment.yaml
+	kubectl apply -f k8s/api/
+	kubectl apply -f k8s/lb/
+	kubectl apply -f k8s/webapp/
+
 docker:
 	docker build -t $(IMAGE):development .
 
