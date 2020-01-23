@@ -1,4 +1,4 @@
-BINARY := api
+BINARY := server
 
 build:
 	go build -o $(BINARY) main.go

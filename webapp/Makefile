@@ -1,14 +1,23 @@
+BINARY := server
+
 build: clean env
 	npm run parcel -- build src/index.html
 
 build-prod: clean env-prod
 	npm run parcel -- build src/index.html
 
+bundle:
+	go build -o $(BINARY) main.go
+
+build-bundle: build bundle
+
+build-bundle-prod: build-prod bundle
+
 check:
 	npm run prettier -- --check "src/*.ts*"
 
 clean:
-	rm -rf .cache/ dist/ .env
+	rm -rf .cache/ dist/ .env $(BINARY)
 
 deps:
 	npm ci
@@ -24,6 +33,9 @@ lint:
 
 prettier:
 	npm run prettier -- --write "src/*.ts*"
+
+run:
+	go run main.go
 
 serve:
 	npm run serve
