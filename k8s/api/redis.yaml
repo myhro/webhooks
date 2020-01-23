@@ -1,0 +1,31 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: webhooks-redis
+spec:
+  selector:
+    matchLabels:
+      app: webhooks-redis
+  serviceName: webhooks-redis
+  template:
+    metadata:
+      labels:
+        app: webhooks-redis
+    spec:
+      containers:
+        - name: redis
+          image: redis:4-alpine
+          ports:
+            - containerPort: 6379
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: webhooks-redis
+spec:
+  selector:
+    app: webhooks-redis
+  ports:
+    - port: 6379
+      targetPort: 6379

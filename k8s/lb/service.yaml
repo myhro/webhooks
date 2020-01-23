@@ -1,0 +1,11 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: webhooks-lb
+spec:
+  selector:
+    app: webhooks-lb
+  ports:
+    - port: 80
+      targetPort: 80

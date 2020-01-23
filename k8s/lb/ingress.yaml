@@ -1,0 +1,17 @@
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: webhooks-lb
+  annotations:
+    ingress.kubernetes.io/ssl-redirect: "true"
+spec:
+  rules:
+    - host: webhooks.myhro.info
+      http:
+        paths:
+          - backend:
+              serviceName: webhooks-lb
+              servicePort: 80
+  tls:
+    - secretName: myhro-info-tls-cert

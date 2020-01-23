@@ -1,0 +1,27 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webhooks-api
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: webhooks-api
+  template:
+    metadata:
+      labels:
+        app: webhooks-api
+    spec:
+      containers:
+        - name: api
+          image: "myhro/webhooks-websockets:IMAGE_VERSION"
+          command:
+            - /app/api
+          env:
+            - name: GIN_MODE
+              value: release
+            - name: REDIS_ADDR
+              value: "webhooks-redis:6379"
+          ports:
+            - containerPort: 8080

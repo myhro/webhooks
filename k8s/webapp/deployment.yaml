@@ -1,0 +1,25 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webhooks-webapp
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: webhooks-webapp
+  template:
+    metadata:
+      labels:
+        app: webhooks-webapp
+    spec:
+      containers:
+        - name: webapp
+          image: "myhro/webhooks-websockets:IMAGE_VERSION"
+          command:
+            - /app/webapp
+          env:
+            - name: GIN_MODE
+              value: release
+          ports:
+            - containerPort: 3000
