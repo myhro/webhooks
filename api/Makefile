@@ -1,7 +1,8 @@
 BINARY := server
 
 build:
-	go build -o $(BINARY) main.go
+	go build -ldflags "-s -w" -o $(BINARY) main.go
+	upx $(BINARY)
 
 clean:
 	rm -f $(BINARY)
