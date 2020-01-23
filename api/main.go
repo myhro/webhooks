@@ -112,6 +112,7 @@ func init() {
 
 func main() {
 	r := gin.Default()
+	port := ":8080"
 
 	r.DELETE("/:chan", webhook)
 	r.GET("/:chan", webhook)
@@ -125,6 +126,8 @@ func main() {
 
 	upgrader.CheckOrigin = checkOrigin
 
-	log.Print("Starting server...")
-	r.Run()
+	if gin.Mode() == "release" {
+		log.Print("Starting server on port ", port)
+	}
+	r.Run(port)
 }

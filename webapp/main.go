@@ -2,17 +2,18 @@ package main
 
 import (
 	"log"
-	"net/http"
 
-	"github.com/gobuffalo/packr"
+	"github.com/gin-gonic/gin"
 )
 
 func main() {
-	box := packr.NewBox("./dist")
+	r := gin.Default()
 	port := ":3000"
 
-	http.Handle("/", http.FileServer(box))
+	r.Static("/", "./dist")
 
-	log.Print("Listening and serving HTTP on ", port)
-	http.ListenAndServe(port, nil)
+	if gin.Mode() == "release" {
+		log.Print("Starting server on port ", port)
+	}
+	r.Run(port)
 }
