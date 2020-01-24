@@ -4,14 +4,21 @@ kind: Ingress
 metadata:
   name: webhooks-lb
   annotations:
-    ingress.kubernetes.io/ssl-redirect: "true"
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/use-regex: "true"
 spec:
   rules:
     - host: webhooks.myhro.info
       http:
         paths:
           - backend:
-              serviceName: webhooks-lb
-              servicePort: 80
+              serviceName: webhooks-webapp
+              servicePort: 3000
+          - path: /[0-9a-f]{7}
+            backend:
+              serviceName: webhooks-api
+              servicePort: 8080
   tls:
-    - secretName: myhro-info-tls-cert
+    - hosts:
+        - webhooks.myhro.info
+      secretName: webhooks-lb-tls
