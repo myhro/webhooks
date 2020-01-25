@@ -57,11 +57,10 @@ jobs:
     runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v1
-      - name: Dependencies
+      - name: Credentials
         env:
           KUBECTL_CFG: ${{ secrets.KUBECTL_CFG }}
         run: |
-          sudo wget -q -O /usr/local/bin/kubectl https://storage.googleapis.com/kubernetes-release/release/v1.17.2/bin/linux/amd64/kubectl
           mkdir -p $HOME/.kube
           echo "$KUBECTL_CFG" > $HOME/.kube/config
           kubectl version
