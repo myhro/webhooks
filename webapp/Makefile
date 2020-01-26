@@ -6,13 +6,8 @@ build: clean env
 build-prod: clean env-prod
 	npm run parcel -- build src/index.html
 
-bundle:
+build-server:
 	go build -ldflags "-s -w" -o $(BINARY) main.go
-	upx $(BINARY)
-
-build-bundle: build bundle
-
-build-bundle-prod: build-prod bundle
 
 check:
 	npm run prettier -- --check "src/*.ts*"

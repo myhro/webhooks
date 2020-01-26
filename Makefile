@@ -1,19 +1,14 @@
-export CGO_ENABLED := 0
-export GOOS := linux
-
 IMAGE := myhro/webhooks
 VERSION := $(shell git rev-parse --short HEAD)
 
-api-build:
-	make -C api/ build
+build: webapp-deps webapp-build docker
 
-build: api-build webapp-deps webapp-build-bundle docker
-
-build-prod: api-build webapp-deps webapp-build-bundle-prod docker-prod
+build-prod: webapp-deps webapp-build-prod docker
 
 clean:
 	make -C api/ clean
 	make -C webapp/ clean
+	docker rmi -f $(IMAGE)
 
 deploy:
 	sed -i 's/IMAGE_VERSION/$(VERSION)/' k8s/*/deployment.yaml
@@ -22,25 +17,18 @@ deploy:
 	kubectl apply -f k8s/webapp/
 
 docker:
-	docker build -t $(IMAGE):development .
-
-docker-prod:
 	docker build -t $(IMAGE) .
-	docker tag $(IMAGE):latest $(IMAGE):$(VERSION)
-
-deps-ci:
-	sudo apt update
-	sudo apt install -y upx-ucl
 
 push:
+	docker tag $(IMAGE):latest $(IMAGE):$(VERSION)
 	docker push $(IMAGE):$(VERSION)
 	docker push $(IMAGE):latest
 
-webapp-build-bundle:
-	make -C webapp/ build-bundle
+webapp-build:
+	make -C webapp/ build
 
-webapp-build-bundle-prod:
-	make -C webapp/ build-bundle-prod
+webapp-build-prod:
+	make -C webapp/ build-prod
 
 webapp-deps:
 	make -C webapp/ deps

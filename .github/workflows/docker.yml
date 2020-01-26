@@ -1,5 +1,6 @@
+---
 name: Docker
-on: [push]
+"on": [push]
 jobs:
   check:
     runs-on: ubuntu-18.04
@@ -20,15 +21,11 @@ jobs:
     runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v1
-      - uses: actions/setup-go@v1
-        with:
-          go-version: 1.13
       - uses: actions/setup-node@v1
         with:
           node-version: 12.x
       - name: Build
         run: |
-          make deps-ci
           make build
   push:
     if: github.ref == 'refs/heads/master'
@@ -36,9 +33,6 @@ jobs:
     runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v1
-      - uses: actions/setup-go@v1
-        with:
-          go-version: 1.13
       - uses: actions/setup-node@v1
         with:
           node-version: 12.x
@@ -48,7 +42,6 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
       - name: Push
         run: |
-          make deps-ci
           make build-prod
           make push
   deploy:
