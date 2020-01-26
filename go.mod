@@ -1,4 +1,4 @@
-module github.com/myhro/webhooks-websockets
+module github.com/myhro/webhooks
 
 go 1.13
 

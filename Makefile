@@ -1,7 +1,7 @@
 export CGO_ENABLED := 0
 export GOOS := linux
 
-IMAGE := myhro/webhooks-websockets
+IMAGE := myhro/webhooks
 VERSION := $(shell git rev-parse --short HEAD)
 
 api-build:

@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: api
-          image: "myhro/webhooks-websockets:IMAGE_VERSION"
+          image: "myhro/webhooks:IMAGE_VERSION"
           command:
             - /app/api
           env:
