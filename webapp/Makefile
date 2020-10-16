@@ -1,37 +1,33 @@
-BINARY := server
+API_URL ?= 127.0.0.1:8080
+PARCEL_ENTRYPOINT := src/index.html
+PRETTIER_FILES = src/*.ts*
 
 build: clean env
-	npm run parcel -- build src/index.html
-
-build-prod: clean env-prod
-	npm run parcel -- build src/index.html
-
-build-server:
-	go build -ldflags "-s -w" -o $(BINARY) main.go
+	npm run parcel -- build $(PARCEL_ENTRYPOINT)
 
 check:
-	npm run prettier -- --check "src/*.ts*"
+	npm run prettier -- --check $(PRETTIER_FILES)
 
 clean:
-	rm -rf .cache/ dist/ .env $(BINARY)
+	rm -rf .cache/ dist/ .env
+
+deploy: build
+	npm run wrangler -- publish
+
+deploy-prod: build
+	npm run wrangler -- publish --env production
 
 deps:
 	npm ci
 
 env:
-	echo "API_URL=127.0.0.1:8080" > .env
-
-env-prod:
-	echo "API_URL=webhooks.myhro.info" > .env
+	echo "API_URL=$(API_URL)" > .env
 
 lint:
 	npm run eslint
 
 prettier:
-	npm run prettier -- --write "src/*.ts*"
-
-run:
-	go run main.go
+	npm run prettier -- --write $(PRETTIER_FILES)
 
 serve:
 	npm run serve
@@ -40,4 +36,4 @@ types:
 	npm run types
 
 watch: clean env
-	npm run parcel -- src/index.html
+	npm run parcel -- $(PARCEL_ENTRYPOINT)

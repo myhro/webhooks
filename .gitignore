@@ -1,5 +1,6 @@
 .cache/
 dist/
 node_modules/
+workers-site/
 .env
 server
