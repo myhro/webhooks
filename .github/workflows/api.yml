@@ -1,0 +1,49 @@
+---
+name: Docker
+"on": [push]
+jobs:
+  push:
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v1
+      - uses: azure/docker-login@v1
+        with:
+          username: ${{ secrets.DOCKER_LOGIN }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+      - name: Push
+        run: |
+          make build
+          make push
+  deploy:
+    needs: push
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v1
+      - name: Credentials
+        env:
+          KUBECTL_CFG: ${{ secrets.KUBECTL_CFG }}
+        run: |
+          mkdir -p $HOME/.kube
+          echo "$KUBECTL_CFG" > $HOME/.kube/config
+          kubectl version
+      - name: Deploy
+        run: |
+          make deploy
+  deploy-prod:
+    if: github.ref == 'refs/heads/master'
+    needs: deploy
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v1
+      - name: Credentials
+        env:
+          ENV: prod
+          KUBECTL_CFG: ${{ secrets.KUBECTL_CFG }}
+          TUNNEL: a627fafd-4052-4416-8fa9-8c73ba0d185b
+        run: |
+          mkdir -p $HOME/.kube
+          echo "$KUBECTL_CFG" > $HOME/.kube/config
+          kubectl version
+      - name: Deploy
+        run: |
+          make deploy

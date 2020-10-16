@@ -26,37 +26,33 @@ jobs:
           node-version: 12.x
       - name: Build
         run: |
+          cd webapp/
+          make deps
           make build
-  push:
-    if: github.ref == 'refs/heads/master'
+  deploy:
     needs: build
     runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v1
-      - uses: actions/setup-node@v1
-        with:
-          node-version: 12.x
-      - uses: azure/docker-login@v1
-        with:
-          username: ${{ secrets.DOCKER_LOGIN }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-      - name: Push
+      - name: Deploy
+        env:
+          API_URL: webhooks-api.myhro.net
+          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
         run: |
-          make build-prod
-          make push
-  deploy:
+          cd webapp/
+          make deps
+          make deploy
+  deploy-prod:
     if: github.ref == 'refs/heads/master'
-    needs: push
+    needs: deploy
     runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v1
-      - name: Credentials
-        env:
-          KUBECTL_CFG: ${{ secrets.KUBECTL_CFG }}
-        run: |
-          mkdir -p $HOME/.kube
-          echo "$KUBECTL_CFG" > $HOME/.kube/config
-          kubectl version
       - name: Deploy
+        env:
+          API_URL: webhooks-api.myhro.info
+          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
         run: |
-          make deploy
+          cd webapp/
+          make deps
+          make deploy-prod
