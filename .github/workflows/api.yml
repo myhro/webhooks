@@ -37,13 +37,14 @@ jobs:
       - uses: actions/checkout@v1
       - name: Credentials
         env:
-          ENV: prod
           KUBECTL_CFG: ${{ secrets.KUBECTL_CFG }}
-          TUNNEL: a627fafd-4052-4416-8fa9-8c73ba0d185b
         run: |
           mkdir -p $HOME/.kube
           echo "$KUBECTL_CFG" > $HOME/.kube/config
           kubectl version
       - name: Deploy
+        env:
+          ENV: prod
+          TUNNEL: a627fafd-4052-4416-8fa9-8c73ba0d185b
         run: |
           make deploy
