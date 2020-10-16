@@ -1,0 +1,35 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: webhooks-<ENV>-api-tunnel
+spec:
+  selector:
+    matchLabels:
+      app: webhooks-<ENV>-api-tunnel
+  serviceName: webhooks-<ENV>-api-tunnel
+  template:
+    metadata:
+      labels:
+        app: webhooks-<ENV>-api-tunnel
+    spec:
+      containers:
+        - name: cloudflared
+          image: cloudflare/cloudflared:2020.10.0
+          command:
+            - cloudflared
+            - tunnel
+            - run
+            - <TUNNEL>
+          env:
+            - name: NO_AUTOUPDATE
+              value: "true"
+            - name: TUNNEL_URL
+              value: http://webhooks-<ENV>-api:8080
+          volumeMounts:
+            - mountPath: /etc/cloudflared
+              name: cloudflared
+      volumes:
+        - name: cloudflared
+          secret:
+            secretName: webhooks-<ENV>-api-tunnel

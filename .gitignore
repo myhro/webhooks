@@ -3,4 +3,5 @@ dist/
 node_modules/
 workers-site/
 .env
+deploy-k8s.yaml
 server

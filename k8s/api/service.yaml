@@ -2,10 +2,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: webhooks-api
+  name: webhooks-<ENV>-api
 spec:
   selector:
-    app: webhooks-api
+    app: webhooks-<ENV>-api
   ports:
     - port: 8080
       targetPort: 8080
