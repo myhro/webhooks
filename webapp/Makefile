@@ -1,12 +1,10 @@
 API_URL ?= 127.0.0.1:8080
-PARCEL_ENTRYPOINT := src/index.html
-PRETTIER_FILES = src/*.ts*
 
 build: clean env
-	npm run parcel -- build $(PARCEL_ENTRYPOINT)
+	npx parcel build src/index.html
 
 check:
-	npm run prettier -- --check $(PRETTIER_FILES)
+	npx prettier --check src/*.ts*
 
 clean:
 	rm -rf .cache/ dist/ .env
@@ -18,16 +16,16 @@ env:
 	echo "API_URL=$(API_URL)" > .env
 
 lint:
-	npm run eslint
+	npx eslint src/*.ts*
 
 prettier:
-	npm run prettier -- --write $(PRETTIER_FILES)
+	npx prettier --write src/*.ts*
 
 serve:
-	npm run serve
+	npx serve dist/
 
-types:
-	npm run types
+tsc:
+	npx tsc --noEmit
 
 watch: clean env
-	npm run parcel -- $(PARCEL_ENTRYPOINT)
+	npx parcel src/index.html

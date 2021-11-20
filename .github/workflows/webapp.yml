@@ -15,7 +15,7 @@ jobs:
           make deps
           make check
           make lint
-          make types
+          make tsc
   build:
     needs: check
     runs-on: ubuntu-18.04

@@ -21,12 +21,5 @@
     "prettier": "^1.19.1",
     "serve": "^11.3.0",
     "typescript": "^3.9.8"
-  },
-  "scripts": {
-    "eslint": "eslint src/*.ts*",
-    "parcel": "parcel",
-    "prettier": "prettier",
-    "serve": "serve dist/",
-    "types": "tsc --noEmit"
   }
 }
