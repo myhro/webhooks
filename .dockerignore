@@ -1,4 +1,3 @@
 .git/
 webapp/.cache/
 webapp/node_modules/
-webapp/workers-site/node_modules

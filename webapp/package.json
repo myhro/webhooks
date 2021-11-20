@@ -13,7 +13,6 @@
     "websocket": "^1.0.33"
   },
   "devDependencies": {
-    "@cloudflare/wrangler": "^1.13.0",
     "@typescript-eslint/eslint-plugin": "^2.16.0",
     "@typescript-eslint/parser": "^2.16.0",
     "eslint": "^6.8.0",
@@ -28,7 +27,6 @@
     "parcel": "parcel",
     "prettier": "prettier",
     "serve": "serve dist/",
-    "types": "tsc --noEmit",
-    "wrangler": "wrangler"
+    "types": "tsc --noEmit"
   }
 }

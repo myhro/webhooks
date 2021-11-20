@@ -29,30 +29,3 @@ jobs:
           cd webapp/
           make deps
           make build
-  deploy:
-    needs: build
-    runs-on: ubuntu-18.04
-    steps:
-      - uses: actions/checkout@v1
-      - name: Deploy
-        env:
-          API_URL: webhooks-api.myhro.net
-          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
-        run: |
-          cd webapp/
-          make deps
-          make deploy
-  deploy-prod:
-    if: github.ref == 'refs/heads/master'
-    needs: deploy
-    runs-on: ubuntu-18.04
-    steps:
-      - uses: actions/checkout@v1
-      - name: Deploy
-        env:
-          API_URL: webhooks-api.myhro.info
-          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
-        run: |
-          cd webapp/
-          make deps
-          make deploy-prod
