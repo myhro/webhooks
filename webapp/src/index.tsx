@@ -11,7 +11,7 @@ import '../node_modules/materialize-css/dist/css/materialize.min.css';
 
 import './css/style.css';
 
-type AppProps = {};
+type AppProps = unknown;
 
 type AppState = {
   url: string;

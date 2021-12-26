@@ -8,7 +8,7 @@ check:
 	npx prettier --check src/*.ts*
 
 clean:
-	rm -rf .cache/ dist/ .env
+	rm -rf .parcel-cache/ dist/ .env
 
 deps:
 	npm ci

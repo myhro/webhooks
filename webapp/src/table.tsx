@@ -14,7 +14,7 @@ type TableProps = {
   webhooks: Webhook[];
 };
 
-class HeadersColumn extends React.Component<HeadersProps, {}> {
+class HeadersColumn extends React.Component<HeadersProps, unknown> {
   render(): JSX.Element {
     return (
       <div className="headers">
@@ -29,7 +29,7 @@ class HeadersColumn extends React.Component<HeadersProps, {}> {
   }
 }
 
-class Row extends React.Component<RowProps, {}> {
+class Row extends React.Component<RowProps, unknown> {
   render(): JSX.Element {
     return (
       <tr>
@@ -46,7 +46,7 @@ class Row extends React.Component<RowProps, {}> {
   }
 }
 
-class Table extends React.Component<TableProps, {}> {
+class Table extends React.Component<TableProps, unknown> {
   render(): JSX.Element {
     if (this.props.webhooks.length > 0) {
       return (
