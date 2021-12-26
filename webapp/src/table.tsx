@@ -35,7 +35,6 @@ class Row extends React.Component<RowProps, unknown> {
       <tr>
         <td>{this.props.webhook.date}</td>
         <td>{this.props.webhook.ip}</td>
-        <td>{this.props.webhook.proto}</td>
         <td>{this.props.webhook.method}</td>
         <td>
           <HeadersColumn headers={this.props.webhook.headers} />
@@ -55,7 +54,6 @@ class Table extends React.Component<TableProps, unknown> {
             <tr>
               <th>Date</th>
               <th>IP</th>
-              <th>Protocol</th>
               <th>Method</th>
               <th>Headers</th>
               <th>Body</th>

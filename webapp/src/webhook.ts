@@ -8,5 +8,4 @@ export type Webhook = {
   headers: Headers;
   ip: string;
   method: string;
-  proto: string;
 };
