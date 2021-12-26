@@ -1,8 +1,9 @@
 compatibility_date = "2021-12-26"
-
 name = "webhooks-api"
 type = "javascript"
 workers_dev = true
+
+[build]
 
 [build.upload]
 dir = "src/"
@@ -14,6 +15,25 @@ type = "ESModule"
 globs = ["**/*.js"]
 
 [durable_objects]
-bindings = [
-  { name = "listener", class_name = "Listener" },
-]
+
+[[durable_objects.bindings]]
+name = "listener"
+class_name = "Listener"
+
+[env]
+
+[env.staging]
+
+[env.staging.durable_objects]
+
+[[env.staging.durable_objects.bindings]]
+name = "listener"
+class_name = "Listener"
+
+[env.production]
+
+[env.production.durable_objects]
+
+[[env.production.durable_objects.bindings]]
+name = "listener"
+class_name = "Listener"
