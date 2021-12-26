@@ -1,0 +1,13 @@
+{
+    "env": {
+        "serviceworker": true
+    },
+    "extends": [
+        "airbnb-base"
+    ],
+    "globals": {
+      "WebSocketPair": "readonly"
+    },
+    "rules": {
+    }
+}

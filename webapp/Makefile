@@ -1,4 +1,4 @@
-API_URL ?= 127.0.0.1:8080
+API_URL ?= 127.0.0.1:8787
 PARCEL_FILES := src/index.html src/404.html
 
 build: clean env

@@ -1,0 +1,19 @@
+compatibility_date = "2021-12-26"
+
+name = "webhooks-api"
+type = "javascript"
+workers_dev = true
+
+[build.upload]
+dir = "src/"
+format = "modules"
+main = "./index.js"
+
+[[build.upload.rules]]
+type = "ESModule"
+globs = ["**/*.js"]
+
+[durable_objects]
+bindings = [
+  { name = "listener", class_name = "Listener" },
+]
