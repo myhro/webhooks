@@ -1,16 +1,12 @@
 ---
-name: Docker
+name: API
 "on": [push]
 jobs:
   push:
     runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v1
-      - uses: azure/docker-login@v1
-        with:
-          username: ${{ secrets.DOCKER_LOGIN }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-      - name: Push
+      - name: Build
         run: |
+          cd api/
           make build
-          make push

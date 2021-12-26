@@ -1,5 +1,5 @@
 ---
-name: Docker
+name: WebApp
 "on": [push]
 jobs:
   check:
